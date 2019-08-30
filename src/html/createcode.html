@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>推广</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"/>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <link rel="stylesheet" href="../css/ydui.css"/>
+    <link rel="stylesheet" href="../css/main.css"/>
+    <script src="../js/ydui.flexible.js"></script>
+</head>
+<body>
+<section class="g-flexview">
+    <div class="g-scrollview extension">
+        <div class="mask-white">
+            <div class="mask-box">
+                <div class="title">
+                    <div class="grids-icon">
+                        <i class="icon-share2"></i>
+                    </div>
+                    <span>我要推广</span>
+                </div>
+                <div class="code">
+                    <p class="intro">交易手续费率</p>
+                    <p class="number"><span>0.36</span>%</p>
+                    <img src="../images/ercode.png" alt="">
+                    <p>请转发二维码进行推广</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/ydui.js"></script>
+<script>
+   
+       //分享功能----脚本
+$(function(){
+    $('.del').on('click',function(){
+        $('.extension').fadeOut();
+    });
+    var pyqtitle,pytitle,pydesc,link,img;
+    pyqtitle = "邀请函：溢美金融旅游金融创新峰会";
+    pytitle = "邀请函：溢美金融旅游金融创新峰会";
+    pydesc = "溢美金融旅游金融创新峰会邀请函，邀百万旅业从业者共讨旅游金融未来创新发展。";
+    link = location.href;
+    img = location.href+"img/logo.jpg";
+    $.ajax({
+        url:"/wxcmp/getWxJsSdkConfig",
+        type:"post",
+        data:{"url":location.href.split('#')[0]},
+        dataType: 'json',
+        success:function(data){
+            //console.log(data);
+            // 微信配置
+            wx.config(data);
+            // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在 页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready 函数中。
+            wx.ready(function(){
+                // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
+                wx.onMenuShareTimeline({
+                    title: pyqtitle,
+                    link: link,
+                    imgUrl: img // 分享图标
+                });
+                // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
+                wx.onMenuShareAppMessage({
+                    title: pytitle, // 分享标题
+                    link: link,
+                    desc: pydesc,
+                    imgUrl: img // 分享图标
+                });
+            });
+        }
+    });
+});
+
+</script>
+</body>
+</html>

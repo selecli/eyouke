@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的业绩</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"/>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <link rel="stylesheet" href="../css/ydui.css"/>
+    <link rel="stylesheet" href="../css/main.css"/>
+    <script src="../js/ydui.flexible.js"></script>
+</head>
+<body>
+<section class="g-flexview performance">
+    <div class="g-scrollview">
+        <div class="m-cell pd-14">
+            <div class="cell-item date">
+                <div class="cell-left">2017-05-27</div>
+            </div>
+            <div class="cell-item txt-center ">
+                <div class="cell-left money">7888.40</div>
+            </div>
+            <div class="cell-item txt-center">
+                <div class="cell-left profit">当日利润(元)</div>
+            </div>
+            <div class="cell-item details">
+                <div class="cell-left">
+                    <div>
+                        <div class="num">321,480.44</div>
+                        <div class="total">当日交易总额(元)</div>
+                    </div>
+                </div>
+                <div class="cell-right">
+                    <div>
+                        <div class="num">889</div>
+                        <div class="total">下级总人数(人)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="m-cell takeCashBox">
+            <div class="cell-item">
+                <div class="cell-left takeCash">
+                    <img src="../images/takecash.png" alt="">
+                    提现
+                </div>
+                <div class="cell-right takeCashRecord">提现记录</div>
+            </div>
+        </div>
+        <div class="progress">
+            <div class="title">历史利润收入</div> 
+        </div>
+        <div class="mask-black-dialog" id="CONFRIM">
+            <div class="m-confirm">
+                <div class="confirm-bd">
+                    <div class="m-cell none-bg">
+                        <div class="cell-item">
+                            <div class="cell-left">账户余额</div>
+                            <div id="withdrawBalance" class="cell-right">0元</div>
+                        </div>
+                        <div class="cell-item">
+                            <div class="cell-left">提现金额</div>
+                            <div class="cell-right"><input id="withdrawAmount" type="text" class="cell-input text-right money" autocomplete="off"
+                                                           placeholder="请输入提现金额">元
+                            </div>
+                        </div>
+                        <div class="cell-item">
+                            <div class="cell-left">到账金额</div>
+                            <div id="collectAmount" class="cell-right">0元</div>
+                        </div>
+                        <div class="cell-item">
+                            <div class="cell-left">提现手续费</div>
+                            <div id="withdrawFee" class="cell-right">0元</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="confirm-ft">
+                    <a href="javascript:;" class="confirm-btn default">取消</a>
+                    <a href="javascript:;" class="confirm-btn primary">确定</a>
+                </div>
+        </div>   
+    </div>
+</section>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/ydui.js"></script>
+<script>
+    $(function () {
+        var dialog=YDUI.dialog;
+        $('.settings').on('click',function(){
+           $(this).text('清除金额');
+           $('.sum').fadeIn();
+           $('.sum input').val('').focus();
+           $('.setAmount').css('marginTop','.8rem');
+        });
+        $('.del').on('click',function(){
+            $('.paycode').fadeOut();
+            window.location.href="gathering.html"
+        });
+        var data=[
+        {date:'2017-05-26',total:1000},
+        {date:'2017-05-25',total:7783.23},
+        {date:'2017-05-24',total:7712.44},
+        {date:'2017-05-23',total:8188.60},
+        {date:'2017-05-22',total:7783.23},
+        {date:'2017-05-21',total:7888.60},
+        {date:'2017-05-20',total:7783.23}
+        ];
+        var w;
+        var t=[];
+        $.each(data,function(i,e){
+            t.push(e.total);
+            t.sort(function(a,b){
+                return b-a;
+            })
+        })
+        $.each(data,function(i,e){
+             w =parseInt(e.total/t[0]*100);
+             if(w<1){
+                w=1;
+             }
+           var  html='<div class="progressBar clearfix">'+
+                '<div class="bar" style="width:'+w+'%;"></div>'+
+                '<div class="fl">'+e.date+'</div>'+
+                '<div class="fr">'+e.total+'</div>'+
+            '</div>'
+            $('.progress').append(html);
+        });
+         var $accountBalance = $("#accountBalance");
+        var $withdrawBalance = $("#withdrawBalance");
+        var $collectAmount = $("#collectAmount");
+        var $withdrawFee = $("#withdrawFee");
+        var $withdrawAmount = $("#withdrawAmount");
+        var $confirm = $('#CONFRIM'),money={};
+        $('.takeCash').on('click', function () {
+            /*dialog.alert('清明期间暂不支持提现，请稍后。', 'error');
+            return;*/
+            canSubmit=false;
+            $.ajax({
+              url: '<%=request.getContextPath() %>/getBalance.do',
+              dataType: 'json',
+              data: {},
+              success: function (ret) {
+                  $withdrawAmount.val('');
+                  $collectAmount.text('0元');
+                  money = ret.data;
+                  $withdrawBalance.text(ret.data.balance+"元");
+                  $withdrawFee.text(ret.data.tradeFee+"元");
+                  YDUI.util.pageScroll.lock();
+                  $confirm.css('display', 'flex');
+              }
+            });
+        });
+        var canSubmit=false;
+        $withdrawAmount.on('change',function(){
+            canSubmit=false;
+            var $this=$(this);
+            if($.trim($this.val())==''){
+                return false;
+            }
+            var money1=Number($this.val());
+            if(money1){
+                money1=Math.abs(money1);
+                $this.val(parseInt(money1*100)/100);
+             }else{
+                dialog.toast('输入正确数字', 'error');
+                return false;
+             }
+
+            var m=$this.val()*100,//输入金额
+            balance=money.balance*100,//账户余额
+            tradeFee=money.tradeFee*100,//手续费
+            balance=money.balance*100;//实际到账金额
+
+            if(m>balance){
+                dialog.toast('输入金额大于账户余额！', 'error');
+                return false;
+            }else if(tradeFee > balance){
+                dialog.toast('账户余额不足！', 'error');
+                return false;
+            }else if(m+tradeFee>balance){
+                $collectAmount.text(Math.round((m-tradeFee))/100+'元');
+            }else if(m+tradeFee<=balance){
+                $collectAmount.text(m/100+'元');
+            }
+            canSubmit=true;
+        });
+
+        $('').on('click',function(){
+            $('#CONFRIM').css('display','flex');
+        });
+        $('.default').on('click',function(){
+            $('#CONFRIM').hide();
+        });
+        $('.takeCashRecord').on('click',function(){
+             window.location.href='';
+        }); 
+
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>选择支付渠道服务</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"/>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <link rel="stylesheet" href="../css/ydui.css"/>
+    <link rel="stylesheet" href="../css/main.css"/>
+    <script src="../js/ydui.flexible.js"></script>
+</head>
+<body>
+<section class="g-flexview">
+    <div class="g-scrollview">
+        <div class="m-celltitle">&nbsp;</div>
+        <div class="m-cell">
+            <div class="cell-item">
+                <div class="cell-left">收款人姓名</div>
+                <div class="cell-right">
+                    收款人
+                </div>
+            </div>
+            <div class="cell-item">
+                <div class="cell-left">收款账号</div>
+                <div class="cell-right">
+                    <input type="tel" class="cell-input text-right" placeholder="请输入收款账号" autocomplete="off"
+                           parameter="account" maxlength="19">
+                </div>
+            </div>
+            <div class="cell-item">
+                <div class="cell-left">收款银行</div>
+                <label class="cell-right cell-arrow">
+                    <select class="cell-select text-right" parameter="bank">
+                        <option value="0">请选择收款银行</option>
+                        <option value="1">中国银行</option>
+                        <option value="2">建设银行</option>
+                        <option value="3">工商银行</option>
+                    </select>
+                </label>
+            </div>
+            <div class="cell-item">
+                <div class="cell-left">收款支行</div>
+                <label class="cell-right cell-arrow">
+                    <select class="cell-select text-right" parameter="branch">
+                        <option value="0">请选择收款支行</option>
+                        <option value="1">国贸支行</option>
+                        <option value="2">大望路支行</option>
+                        <option value="3">王府井支行</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+        <div class="m-cell">
+            <ul class="m-grids-2 tab">
+                <li class="grids-item current" data-index="0">
+
+                    <div class="grids-txt"><span class="next"></span>次日到账</div>
+                </li>
+                <li class="grids-item" data-index="1">
+                    <div class="grids-txt"><span class="right"></span>实时到账</div>
+                </li>
+            </ul>
+        </div>
+        <div class="m-cell">
+            <div class="cell-item top-line">
+                <div class="cell-left">交易手续费</div>
+                <div class="cell-right">具体待与销售协商</div>
+            </div>
+            <div class="cell-item">
+                <div class="cell-left">提现手续费</div>
+                <div class="cell-right">具体待与销售协商</div>
+            </div>
+            <div class="cell-item">
+                <div class="cell-left">消费返佣比例</div>
+                <div class="cell-right">具体待与销售协商</div>
+            </div>
+        </div>
+        <div class="m-button">
+            <button id="submit" type="button" class="btn-block btn-primary">下一步</button>
+        </div>
+    </div>
+</section>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/ydui.js"></script>
+<script>
+    $(function () {
+        var dialog = YDUI.dialog;
+        $('#submit').on('click', function () {
+            var data = YDUI.util.getJsonData('#dataArea');
+
+            if (!data.account) {
+                dialog.notify('请先输入收款账号');
+                return false;
+            }
+            if (data.bank == '0') {
+                dialog.notify('请选择收款银行');
+                return false;
+            }
+            if (data.branch == '0') {
+                dialog.notify('请选择收款支行');
+                return false;
+            }
+
+            dialog.loading.open('提交中...');
+            /**
+             * 后台成功后跳转
+             */
+            dialog.toast('推荐人手机号错误，请重新输入', 'error');
+            YDUI.util.ajax({
+                url: "",
+                data: data,
+                success: function (result) {
+                    /**
+                     * 成功跳转，失败弹窗
+                     */
+                    dialog.toast('推荐人手机号错误，请重新输入', 'error');
+                    dialog.alert('<h5>您的资料已经成功提交！</h5><p>我们会在一个工作日内完成审核，请注意查收短信结果通知</p>',function () {
+                        WeixinJSBridge.call('closeWindow');
+                    });
+                }
+            });
+
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>推广</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"/>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <link rel="stylesheet" href="../css/ydui.css"/>
+    <link rel="stylesheet" href="../css/main.css"/>
+    <script src="../js/ydui.flexible.js"></script>
+</head>
+<body>
+<section class="g-flexview">
+    <div class="g-scrollview extension">
+           <div class="m-cell">
+                <div class="cell-item">
+                    <div class="cell-left">
+                        我的成本费率：0.35%
+                    </div>
+                    <div class="cell-right">
+                        <div class="m-button">
+                            <button  type="button" class="btn-block btn-primary creatCode">创建推荐码</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell-item cell-code">
+                    <div class="cell-left">
+                        <h3>我的成本费率：<span class="num"> 0.35%</span></h3>
+                        <p>创建时间: 2017-05-05 15:30</p>
+                    </div>
+                    <div class="cell-right cell-arrow">
+                    </div>
+                </div>
+                <div class="cell-item cell-code">
+                    <div class="cell-left">
+                        <h3>我的成本费率：<span class="num">0.35%</span></h3>
+                        <p>创建时间: 2017-05-05 15:30</p>
+                    </div>
+                    <div class="cell-right cell-arrow">
+                    </div>
+                </div>
+                <div class="cell-item cell-code">
+                    <div class="cell-left">
+                        <h3>我的成本费率：<span class="num"> 0.35% </span></h3>
+                        <p>创建时间: 2017-05-05 15:30</p>
+                    </div>
+                    <div class="cell-right cell-arrow">
+                    </div>
+                </div>
+            </div>
+    </div>
+</section>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/ydui.js"></script>
+<script>
+    $(function(){
+        $('.creatCode').on('click',function(){
+            window.location.href="creat.html";
+        });
+        $('.del').on('click',function(){
+            $('.mask-white').fadeOut();
+        });
+        $('.cell-code').on('click',function(){
+            $('.mask-white').fadeIn();
+            $('.number').text($(this).find('.num').text());
+        });
+    });
+</script>
+</body>
+</html>

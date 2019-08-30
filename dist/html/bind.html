@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>绑定收款二维码</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"/>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <link rel="stylesheet" href="../css/ydui.css"/>
+    <link rel="stylesheet" href="../css/main.css"/>
+    <script src="../js/ydui.flexible.js"></script>
+</head>
+<body>
+<section class="g-flexview">
+    <div class="g-scrollview">
+        <div class="m-celltitle">&nbsp;</div>
+        <div id="dataArea" class="m-cell">
+            <div class="cell-item">
+                <div class="cell-right">
+                    <input type="tel" class="cell-input" placeholder="商家联系人电话" autocomplete="off" maxlength="11"
+                           parameter="userPhone">
+                </div>
+            </div>
+            <div class="cell-item">
+                <div class="cell-right">
+                    <input type="text" class="cell-input" placeholder="图形校验码" autocomplete="off" maxlength="4"
+                           parameter="codeImg">
+                    <img id="codeImg" class="code-img" src="" alt="">
+                </div>
+            </div>
+            <div class="cell-item">
+                <div class="cell-right">
+                    <input type="tel" class="cell-input" placeholder="短信验证码" autocomplete="off" maxlength="6"
+                           parameter="code">
+                    <a href="javascript:void(0);" class="btn btn-transparent" id="getCode">获取短信验证码</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="m-button">
+            <button id="submit" type="button" class="btn-block btn-primary">绑 定</button>
+        </div>
+    </div>
+</section>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/ydui.js"></script>
+<script>
+    $(function () {
+        var dialog = YDUI.dialog;
+
+        var $getCode = $('#getCode');
+
+        // 定义参数
+        $getCode.sendCode({
+            disClass: 'btn-disable'
+        });
+
+        $getCode.on('click', function () {
+            var $this = $(this),
+                    data = YDUI.util.getJsonData('#dataArea');
+            if (!data.userPhone) {
+                dialog.notify('请先输入商家联系人电话');
+                return false;
+            }
+            if (!YDUI.util.isPhoneNumber(data.userPhone)) {
+                dialog.notify('请先输入正确电话号码');
+                return false;
+            }
+            if (!data.codeImg) {
+                dialog.notify('请先输入图形校验码');
+                return false;
+            }
+            dialog.loading.open('发送中...');
+            /**
+             * 验证图形校验码
+             */
+            YDUI.util.ajax({
+                url: '',
+                data: {'imgText': data.codeImg},
+                success: function (data) {
+                    if (data.true) {
+                        /**
+                         * 发送验证码
+                         */
+                        YDUI.util.ajax({
+                            url: "",
+                            data: data,
+                            success: function () {
+                                dialog.loading.close();
+                                $this.sendCode('start');
+                                dialog.toast('已发送', 'success');
+                            }
+                        });
+                    } else {
+                        dialog.toast('图形校验码错误', 'error');
+                    }
+                }
+            });
+
+        });
+
+        $('#submit').on('click', function () {
+            var data = YDUI.util.getJsonData('#dataArea');
+            if (!data.userPhone) {
+                dialog.notify('请先输入商家联系人电话');
+                return false;
+            }
+            if (!YDUI.util.isPhoneNumber(data.userPhone)) {
+                dialog.notify('请先输入正确电话号码');
+                return false;
+            }
+            if (!data.code) {
+                dialog.notify('请先输入短信验证码');
+                return false;
+            }
+
+            dialog.loading.open('发送中...');
+            /**
+             * 后台成功后跳转
+             */
+            dialog.toast('推荐人手机号错误，请重新输入', 'error');
+            YDUI.util.ajax({
+                url: "",
+                data: data,
+                success: function (result) {
+                    /**
+                     * 成功跳转，失败弹窗
+                     */
+                    dialog.toast('推荐人手机号错误，请重新输入', 'error');
+                    window.location.href = '';
+                }
+            });
+
+        });
+        var codeImgUrl = '../images/code.png',
+                $codeImg = $('#codeImg');
+        $codeImg.on('click', function () {
+            $codeImg.attr('src', codeImgUrl + "?t=" + (new Date()).valueOf())
+        }).trigger('click');
+    });
+</script>
+</body>
+</html>

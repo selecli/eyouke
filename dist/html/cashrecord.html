@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实时收入</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"/>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <link rel="stylesheet" href="../css/ydui.css"/>
+    <link rel="stylesheet" href="../css/main.css"/>
+    <script src="../js/ydui.flexible.js"></script>
+</head>
+<body>
+<div class="g-flexview">
+    <div id="list" class="g-scrollview" style="padding-top:.2rem;">
+        <div id="listContent" class="m-list list-theme6">
+            
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/ydui.js"></script>
+<script>
+    $(function () {
+        var dialog = YDUI.dialog, $listContent = $('#listContent'), $list = $('#list');
+        var page = 1;
+        function formatData(time) {
+            var t = new Date(time);
+            var Y = t.getFullYear();
+            var M = t.getMonth() + 1;
+            var D = t.getDate();
+            var h = t.getHours();
+            var m = t.getMinutes();
+            var s = t.getSeconds();
+            return Y + '/' + M + '/' + D + ' ' + h + ':' + m + ':' + s;
+        }
+        function todo(n){
+            n=n.tostring();
+            return n[1]?n:'0'+n;
+        }
+        var html='';
+        var data = [
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+
+
+
+        ]
+        var load = function (more, callback) {
+            if (!more) {
+                page = 1;
+            }
+            $.each(data,function(i,e){
+                html += '<div class="list-item"><p>提现时间<span>'+formatData(e.creatTime)+'</span></p><p>结算银行卡号<span>'+e.cardNumber+'</span></p><p>提现订单编号<span>'+e.orderId+'</span></p><p>到账金额<span class="blue">'+e.orderAmount+'元</span></p><p>提现手续费<span>'+e.fee+'元</span></p></div>';
+            });
+            if (more) {
+                $listContent.append(html);
+            } else {
+                $listContent.html(html);
+                var tipStr = data.length > 0 ? '为您更新了' + data.length + '条内容' : '已是最新内容';
+                YDUI.dialog.toast(tipStr, 'none', 1500);
+            }
+            ++page;
+            typeof callback == 'function' && callback(data);
+            // $.ajax({
+            //     url: '<%=request.getContextPath() %>/realIncomeList.do',
+            //     dataType: 'json',
+            //     data: {"current": page},
+            //     success: function (ret) {
+            //         var data = ret.data.page.rows, html = '';
+            //         $accountBalance.text(ret.data.balance);
+            //         $.each(data, function (i, e) {
+            //             html += '<div class="list-item"><p>提现时间<span>'+formatData(e.creatTime)+'</span></p><p>结算银行卡号<span>'+e.cardNumber+'</span></p><p>提现订单编号<span>'+e.orderId+'</span></p><p>到账金额<span class="blue">'+e.orderAmount+'元</span></p><p>提现手续费<span>'+e.fee+'元</span></p></div>';
+            //         });
+            //         if (more) {
+            //             $listContent.append(html);
+            //         } else {
+            //             $listContent.html(html);
+            //             var tipStr = data.length > 0 ? '为您更新了' + data.length + '条内容' : '已是最新内容';
+            //             YDUI.dialog.toast(tipStr, 'none', 1500);
+            //         }
+            //         ++page;
+            //         typeof callback == 'function' && callback(data);
+            //     }
+            // });
+        };
+        $listContent.pullRefresh({
+            loadListFn: function () {
+                var def = $.Deferred();
+                load(false, function () {
+                    def.resolve();
+                });
+                return def.promise();
+            }
+        });
+        $list.infiniteScroll({
+            binder: '#list',
+            pageSize: 10,
+            initLoad: false,
+            loadListFn: function () {
+                var def = $.Deferred();
+                load(true, function (listArr) {
+                    def.resolve(listArr);
+                });
+                return def.promise();
+            }
+        });
+    });
+</script>
+</body>
+</html>

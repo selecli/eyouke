@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>收款</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"/>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <link rel="stylesheet" href="../css/ydui.css"/>
+    <link rel="stylesheet" href="../css/main.css"/>
+    <script src="../js/ydui.flexible.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+<section class="g-flexview">
+    <div class="g-scrollview gathering">
+           <div class="m-cell">
+                <div class="cell-item">
+                    <div class="cell-left">
+                        <p>收款金额</p>
+                        <div class="cash">
+                             <span>¥</span>
+                             <div>
+                                 <span class="cursor"></span>
+                                 <input type="text" class="cell-input" autofocus="autofocus"/>
+                             </div>
+                             
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="m-button">
+                <button  type="button" class="btn-block btn-primary btn-alipay">
+                <img src="../images/alipay2.png" alt="" class="alipay" style="display:inline-block; vertical-align:middle">
+                支付宝二维码收款
+                </button>
+                <button  type="button" class="btn-block btn-warning btn-wechat" >
+                    <img src="../images/wechatpay.png" alt="" class="wechatpay">
+                微信二维码收款</button>
+            </div>
+    </div>
+</section>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/ydui.js"></script>
+<script>
+    $(function(){
+        $('.btn-alipay').on('click',function(){
+            window.location.href='alipay.html';
+        });
+        $('.btn-wechat').on('click',function(){
+             window.location.href='paycode.html';
+        });
+        if (/iPad|iPhone|iPod/g.test(navigator.userAgent)) {
+           $('.cursor').show(); 
+           $(document).on('touchstart',function(){
+             $('.cursor').hide();
+           });  
+        }
+        
+    });
+</script>
+</body>
+</html>

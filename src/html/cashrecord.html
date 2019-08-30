@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实时收入</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"/>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <link rel="stylesheet" href="../css/ydui.css"/>
+    <link rel="stylesheet" href="../css/main.css"/>
+    <script src="../js/ydui.flexible.js"></script>
+</head>
+<body>
+<div class="g-flexview">
+    <div id="list" class="g-scrollview" style="padding-top:.2rem;">
+        <div id="listContent" class="m-list list-theme6">
+            
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/ydui.js"></script>
+<script>
+    $(function () {
+        var dialog = YDUI.dialog, $listContent = $('#listContent'), $list = $('#list');
+        var page = 1;
+        function formatData(time) {
+            var t = new Date(time);
+            var Y = t.getFullYear();
+            var M = t.getMonth() + 1;
+            var D = t.getDate();
+            var h = t.getHours();
+            var m = t.getMinutes();
+            var s = t.getSeconds();
+            return Y + '/' + M + '/' + D + ' ' + h + ':' + m + ':' + s;
+        }
+        function todo(n){
+            n=n.tostring();
+            return n[1]?n:'0'+n;
+        }
+        var html='';
+        var data = [
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+            {creatTime:'1988/02/01 12:30:01',cardNumber:1122,orderId:12313,orderAmount:4000,fee:4 },
+        ]
+
+
+
+         var page = 1, pageSize = 10;
+         var load =function(more,callback){
+                $.each(data,function(i,e){
+                    html+='<div class="list-item"><p class="title">' + formatData(e.createTime) + '</p><p>订单编号<span>' + e.orderId + '</span></p><p>订单编号<span>' + e.cardNumber + '</span></p><p>订单金额<span class="blue">' + e.orderAmount + '元</span></p><p>返佣金额<span>' + e.fee + '元</span></p></div>';
+                });
+                if(more){
+                   $('#listContent').append(html);
+               }else{
+                    $('#listContent').html(html);
+                    var tipStr = data.length > 0 ? '为您更新了' + data.length + '条内容' : '已是最新内容';
+                    YDUI.dialog.toast(tipStr, 'none', 1500);
+               }
+               typeof callback =='function' &&callback(data);
+               ++page;
+         };
+
+        $('#list').infiniteScroll({
+            pageSize: pageSize,
+            initLoad: true,
+            binder: '#list',
+            loadListFn: function () {
+                var def = $.Deferred();
+
+                /* 通过自定义的方法获取数据 */
+                load(true,function(data){
+                     def.resolve(data);
+
+                });
+
+                        /* 获取数据，并插入页面后，调用resole，并传入当前获取的记录列表集合 */
+                       
+
+                        /* 页码自增1 */
+
+                // $.ajax({
+                //     url: '/请求数据方法',
+                //     dataType: 'json',
+                //     data: { page: page, pagesize: pageSize },
+                //     success: function (ret) {
+                //         /* 假设ret.list为后端返回的列表数组 */
+
+                //         /* 用你喜欢的方法将获取到的数据拼接成HTML，然后插入；*/
+                //          建议使用模板引擎，示例使用artTemplate；https://github.com/aui/artTemplate 
+                //         var html = ret.list + '将数据拼接成html';
+                //         $('#J_ListContent').append(html);
+
+                //         /* 获取数据，并插入页面后，调用resole，并传入当前获取的记录列表集合 */
+                //         def.resolve(ret.list);
+
+                //         /* 页码自增1 */
+                //         ++page;
+                //     }
+                // });
+
+                return def.promise();
+            }
+        });
+         $('#list').pullRefresh({
+        initLoad: false,
+        loadListFn: function () {
+            var def = $.Deferred();
+             load(false,function(){
+                def.resolve();
+             });
+            
+
+            // $.ajax({
+            //     url: '/获取数据方法',
+            //     dataType: 'json',
+            //     success: function (ret) {
+            //         /* 假设ret.list为后端返回的列表数组 */
+
+            //         $('#J_ListContent').prepend(ret.list + '将数据拼接成html');
+
+            //         var tipStr = ret.length > 0 ? '为您更新了' + ret.length + '条内容' : '已是最新内容';
+
+            //         YDUI.dialog.toast(tipStr, 'none', 1500);
+
+            //         /* 处理完后调用resolve()方法 */
+            //         def.resolve();
+            //     }
+            // });
+
+            return def.promise();
+        }
+    });
+
+    });
+</script>
+</body>
+</html>

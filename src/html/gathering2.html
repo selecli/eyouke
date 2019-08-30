@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>收款</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"/>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <link rel="stylesheet" href="../css/ydui.css"/>
+    <link rel="stylesheet" href="../css/main.css"/>
+    <script src="../js/ydui.flexible.js"></script>
+    <style>
+        .item,.del{
+            width:33.3%;
+            height:1.07rem;
+            float:left;
+            line-height:1.07rem;
+            text-align:center;
+            background:#fff;
+            box-sizing: border-box;
+            font-size:.5rem;
+        }
+        li{
+            overflow:hidden;
+            border-bottom:1px solid #ccc;
+        }
+        .center{
+            border-left:1px solid #ccc;
+            border-right:1px solid #ccc;
+        }
+        .cursor{
+            height:.8rem;
+            line-height:.8rem;
+            display:inline-block;
+        }
+        .con{
+           height:1rem;
+            line-height:1rem;
+            display:inline-block;
+        }
+        .cash>div{
+            width:6rem;
+            overflow:hidden;
+        }
+        .keybord{
+        width:100%;
+          position:absolute;
+          bottom:0;
+          left:0;
+        }
+    </style>
+</head>
+<body>
+<section class="g-flexview">
+    <div class="g-scrollview gathering">
+           <div class="m-cell">
+                <div class="cell-item">
+                    <div class="cell-left">
+                        <p>收款金额</p>
+                        <div class="cash">
+                             <span>¥</span>
+                             <div>
+                                 <span class="con"></span>
+                                 <span class="cursor"></span>
+                                 <!-- <input type="text" class="cell-input" autofocus="autofocus"/> -->
+                             </div>
+                             
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="m-button">
+                <button  type="button" class="btn-block btn-primary btn-alipay">
+                <img src="../images/alipay2.png" alt="" class="alipay" style="display:inline-block; vertical-align:middle">
+                支付宝二维码收款
+                </button>
+                <button  type="button" class="btn-block btn-warning btn-wechat" >
+                    <img src="../images/wechatpay.png" alt="" class="wechatpay">
+                微信二维码收款</button>
+            </div>
+            <ul class="keybord">
+                <li>
+                    <a href="javascript:;" class="item">1</a>
+                    <a href="javascript:;" class="item center">2</a>
+                    <a href="javascript:;" class="item">3</a>
+                </li>
+                <li>
+                    <a href="javascript:;" class="item">4</a>
+                    <a href="javascript:;" class="item center">5</a>
+                    <a href="javascript:;" class="item">6</a>
+                </li>
+                <li>
+                    <a href="javascript:;" class="item">7</a>
+                    <a href="javascript:;" class="item center">8</a>
+                    <a href="javascript:;" class="item">9</a>
+                </li>
+                <li>
+                    <a href="javascript:;" class="item"></a>
+                    <a href="javascript:;" class="item center">0</a>
+                    <a href="javascript:;" class="del">×</a>
+                </li>
+            </ul>
+            
+    </div>
+</section>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/ydui.js"></script>
+<script>
+    $(function(){
+        $('.btn-alipay').on('click',function(){
+            window.location.href='alipay.html';
+        });
+        $('.btn-wechat').on('click',function(){
+             window.location.href='paycode.html';
+        });
+        // if (/iPad|iPhone|iPod/g.test(navigator.userAgent)) {
+        //    $('.cursor').show(); 
+        //    $(document).on('touchstart',function(){
+        //      $('.cursor').hide();
+        //      $('.cash input').focus();
+        //    });  
+        // }
+        $('.item').on('click',function(){
+            var h =$('.con').text()+$(this).text();
+            $('.con').html(h);
+        });
+        $('.del').on('click',function(){
+            var h = $('.con').html().substring(0,$('.con').html().length-1)
+            $('.con').html(h);
+        });
+
+   });     
+
+    /* 初始化参数 */
+
+</script>
+</body>
+</html>

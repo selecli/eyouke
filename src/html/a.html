@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>关于e游客</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"/>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <link rel="stylesheet" href="../css/ydui.css"/>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/ydui.js"></script>
+    <script src="../js/ydui.flexible.js"></script>
+</head>
+<body>
+<section class="g-flexview">
+    <div class="g-scrollview">
+        <form id="aa">
+        	<input type="text" parameter="11">
+        	<input type="text" parameter="22">
+        	<input type="text">
+        </form>
+    </div>
+</section>
+<script src="../js/fastclick.js"></script>
+<script>
+     function getTotalDayByMonth(year,month){
+        var month = parseInt(month,10);
+        var d = new Date().setDate(year,month,0);
+        return d.getDate();
+
+      }
+      console.log(getTotalDayByMonth(2017,6))
+</script>
+</body>
+</html>

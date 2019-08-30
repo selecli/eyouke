@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的业绩</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"/>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <link rel="stylesheet" href="../css/ydui.css"/>
+    <link rel="stylesheet" href="../css/main.css"/>
+    <script src="../js/ydui.flexible.js"></script>
+</head>
+<body>
+<section class="g-flexview performance">
+    <div class="g-scrollview">
+        <div class="m-cell pd-14">
+            <div class="cell-item date">
+                <div class="cell-left">2017-05-27</div>
+            </div>
+            <div class="cell-item txt-center ">
+                <div class="cell-left money">7888.40</div>
+            </div>
+            <div class="cell-item txt-center">
+                <div class="cell-left profit">当日利润(元)</div>
+            </div>
+            <div class="cell-item details">
+                <div class="cell-left">
+                    <div>
+                        <div class="num">321,480.44</div>
+                        <div class="total">当日交易总额(元)</div>
+                    </div>
+                </div>
+                <div class="cell-right">
+                    <div>
+                        <div class="num">889</div>
+                        <div class="total">下级总人数(人)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="m-cell takeCashBox">
+            <div class="cell-item">
+                <div class="cell-left takeCash">
+                    <img src="../images/takecash.png" alt="">
+                    提现
+                </div>
+                <div class="cell-right takeCashRecord">提现记录</div>
+            </div>
+        </div>
+        <div class="progress">
+            <div class="title">历史利润收入</div> 
+        </div>
+        <div class="mask-black-dialog" id="CONFRIM">
+            <div class="m-confirm">
+                <div class="confirm-bd">
+                    <div class="m-cell none-bg">
+                        <div class="cell-item">
+                            <div class="cell-left">账户余额</div>
+                            <div id="withdrawBalance" class="cell-right">0元</div>
+                        </div>
+                        <div class="cell-item">
+                            <div class="cell-left">提现金额</div>
+                            <div class="cell-right"><input id="withdrawAmount" type="text" class="cell-input text-right money" autocomplete="off"
+                                                           placeholder="请输入提现金额">元
+                            </div>
+                        </div>
+                        <div class="cell-item">
+                            <div class="cell-left">到账金额</div>
+                            <div id="collectAmount" class="cell-right">0元</div>
+                        </div>
+                        <div class="cell-item">
+                            <div class="cell-left">提现手续费</div>
+                            <div id="withdrawFee" class="cell-right">0元</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="confirm-ft">
+                    <a href="javascript:;" class="confirm-btn default">取消</a>
+                    <a href="javascript:;" class="confirm-btn primary">确定</a>
+                </div>
+        </div>   
+    </div>
+</section>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/ydui.js"></script>
+<script>
+   
+
+</script>
+</body>
+</html>

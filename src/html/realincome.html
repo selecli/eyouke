@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>提现记录</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"/>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <link rel="stylesheet" href="../css/ydui.css"/>
+    <link rel="stylesheet" href="../css/main.css"/>
+    <script src="../js/ydui.flexible.js"></script>
+</head>
+<body>
+<div class="g-flexview">
+    <div class="money-control">
+        <div class="money">
+            账户余额(元)
+            <div class="count">2000.00</div>
+            <a class="history" href="javascript:void(0);">查看提现记录</a>
+        </div>
+        <div class="m-cell">
+            <a id="confirm" class="cell-item" href="javascript:;">
+                <img src="../images/money.png" alt="" class="icon">提现
+            </a>
+        </div>
+        <div class="m-celltitle">交易记录</div>
+    </div>
+    <div id="list" class="g-scrollview">
+        <div id="listContent" class="m-list list-theme6">
+
+        </div>
+    </div>
+</div>
+<div class="mask-black-dialog" id="CONFRIM">
+    <div class="m-confirm">
+        <div class="confirm-bd">
+            <div class="m-cell none-bg">
+                <div class="cell-item">
+                    <div class="cell-left">账户余额</div>
+                    <div class="cell-right">200.00元</div>
+                </div>
+                <div class="cell-item">
+                    <div class="cell-left">提现金额</div>
+                    <div class="cell-right"><input type="tel" class="cell-input text-right money" autocomplete="off"
+                                                   placeholder="请输入提现金额">元
+                    </div>
+                </div>
+                <div class="cell-item">
+                    <div class="cell-left">到账金额</div>
+                    <div class="cell-right">0.00元</div>
+                </div>
+                <div class="cell-item">
+                    <div class="cell-left">提现手续费</div>
+                    <div class="cell-right">200.00元</div>
+                </div>
+            </div>
+        </div>
+        <div class="confirm-ft">
+            <a href="javascript:;" class="confirm-btn default">取消</a>
+            <a href="javascript:;" class="confirm-btn primary">确定</a>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/ydui.js"></script>
+<script>
+    $(function () {
+        $('.money-control').on('touchmove', function (e) {
+            e.preventDefault();
+        });
+        var dialog = YDUI.dialog, $listContent = $('#listContent'), $list = $('#list');
+        var page = 1;
+        var load = function (more, callback) {
+            if (more) {
+                page = 1;
+            }
+
+            var html = '<div class="list-item"><p class="title">2017-34-55 34:23<span><img src="../images/alipay.png" alt=""></span></p><p>订单编号<span>123124324355</span></p><p>订单金额<span class="blue">9,000.00元</span></p><p>返佣金额<span>0.00元</span></p><p>货款收入<span>9,000.00元</span></p></div><div class="list-item"><p class="title">2017-34-55 34:23<span><img src="../images/wechat.png" alt=""></span></p><p>订单编号<span>123124324355</span></p><p>订单金额<span class="blue">9,000.00元</span></p><p>返佣金额<span>0.00元</span></p><p>货款收入<span>9,000.00元</span></p></div><div class="list-item"><p class="title">2017-34-55 34:23<span><img src="../images/alipay.png" alt=""></span></p><p>订单编号<span>123124324355</span></p><p>订单金额<span class="blue">9,000.00元</span></p><p>返佣金额<span>0.00元</span></p><p>货款收入<span>9,000.00元</span></p></div><div class="list-item"><p class="title">2017-34-55 34:23<span><img src="../images/wechat.png" alt=""></span></p><p>订单编号<span>123124324355</span></p><p>订单金额<span class="blue">9,000.00元</span></p><p>返佣金额<span>0.00元</span></p><p>货款收入<span>9,000.00元</span></p></div>';
+
+            if (more) {
+                $listContent.append(html);
+            } else {
+                $listContent.html(html);
+                var tipStr = '1234567890'.length > 0 ? '为您更新了' + '1234567890'.length + '条内容' : '已是最新内容';
+                dialog.toast(tipStr, 'none', 1500);
+            }
+            typeof callback == 'function' && callback('1234567890');
+            ++page;
+            console.log(page);
+            /*$.ajax({
+             url: 'http://list.ydui.org/getdata.php?type=backposition',
+             dataType: 'jsonp',
+             data: {
+             page: page,
+             pagesize: pageSize
+             },
+             success: function (ret) {
+             typeof callback == 'function' && callback(ret);
+             }
+             });*/
+        };
+        $listContent.pullRefresh({
+            loadListFn: function () {
+                var def = $.Deferred();
+                load(false, function () {
+                    def.resolve();
+                });
+                return def.promise();
+            }
+        });
+        $list.infiniteScroll({
+            binder: '#list',
+            pageSize: 10,
+            initLoad: false,
+            loadListFn: function () {
+                var def = $.Deferred();
+                load(true, function (listArr) {
+                    def.resolve(listArr);
+                });
+                return def.promise();
+            }
+        });
+        var $confirm = $('#CONFRIM');
+        $('#confirm').on('click', function () {
+            YDUI.util.pageScroll.lock();
+            $confirm.css('display', 'flex');
+        });
+        $confirm.on('click', '.default', function () {
+            YDUI.util.pageScroll.unlock();
+            $confirm.hide();
+        });
+        $confirm.on('click', '.primary', function () {
+            YDUI.util.pageScroll.unlock();
+        });
+    });
+</script>
+</body>
+</html>

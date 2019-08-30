@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>完善个人信息</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"/>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <link rel="stylesheet" href="../css/ydui.css"/>
+    <link rel="stylesheet" href="../css/main.css"/>
+    <script src="../js/ydui.flexible.js"></script>
+</head>
+<body>
+<section class="g-flexview">
+    <form id="fileForm" class="g-scrollview personal-info" enctype="multipart/form-data" method="post" role="form">
+        <div class="m-cell mb-14">
+            <div class="cell-item">
+                <div class="cell-left">姓名</div>
+                <div class="cell-right jc-fs">
+                    <input type="text" class="cell-input ml-2e " placeholder="张三" autocomplete="off"
+                           parameter="name" >
+                </div>
+            </div>
+            <div class="cell-item">
+                <div class="cell-left">银行卡号</div>
+                <div class="cell-right jc-fs">
+                <input type="number"  class="cell-input" placeholder="请输入银行卡卡号" autocomplete="off" parameter="bankcardNumber">
+                </div>
+            </div>
+            <div class="cell-item">
+                <div class="cell-left">所属银行</div>
+                <div class="cell-right" >
+                    <input type="text" readonly="true" class="cell-input" value="北京银行">
+                </div>          
+            </div>
+        </div>
+        <div class="m-cell bg-color mb-0">
+            <div class="cell-item not-border">
+                <div class="cell-left lh-83">手持身份证照片：</div>
+            </div>
+            <div class="photoes">
+                <div class="photo-item">
+                    <input type="file" accept="image/*" name="idcard" parameter="idCard-hold">
+                    <div class="img-wrapper">
+                        <img src="../images/photo.png" alt="">
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <div class="img-wrapper no-border">
+                        <img src="../images/imgbg.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="cell-item not-border">
+                <div class="cell-left lh-83">身份证正面照片：</div>
+            </div>
+            <div class="photoes">
+                <div class="photo-item">
+                    <input type="file" accept="image/*" name="idcard" parameter="idCard-front">
+                    <div class="img-wrapper">
+                        <img src="../images/photo.png" alt="">
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <div class="img-wrapper no-border">
+                        <img src="../images/imgbg.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="cell-item not-border">
+                <div class="cell-left lh-83">身份证反面照片：</div>
+            </div>
+            <div class="photoes">
+                <div class="photo-item">
+                    <input type="file" accept="image/*" name="idcard" parameter="idCard-back">
+                    <div class="img-wrapper">
+                        <img src="../images/photo.png" alt="">
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <div class="img-wrapper no-border">
+                        <img src="../images/imgbg.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="cell-item not-border">
+                <div class="cell-left lh-83">银行卡正面照片：</div>
+            </div>
+            <div class="photoes">
+                <div class="photo-item">
+                    <input type="file" accept="image/*" name="idcard" parameter="bankCard-front">
+                    <div class="img-wrapper">
+                        <img src="../images/photo.png" alt="">
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <div class="img-wrapper no-border">
+                        <img src="../images/imgbg.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="cell-item not-border">
+                <div class="cell-left lh-83">银行卡反面照片：</div>
+            </div>
+            <div class="photoes">
+                <div class="photo-item">
+                    <input type="file" accept="image/*" name="idcard" parameter="bankCard-back">
+                    <div class="img-wrapper">
+                        <img src="../images/photo.png" alt="">
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <div class="img-wrapper no-border">
+                        <img src="../images/imgbg.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="m-cell">
+            <div class="cell-item">
+                <div class="cell-left cl">交易手续费率</div>
+                <div class="cell-right cell-arrow ft-30 cl2">0.38%</div>
+            </div>
+        </div>
+        <div class="m-button">
+            <button id="submit" type="button" class="btn-block btn-primary">确认</button>
+        </div>
+    </form>
+</section>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.form.js"></script>
+<script src="../js/ydui.js"></script>
+<script>
+    $(function () {
+        var dialog = YDUI.dialog;
+        var _width = $('.img-wrapper').width();
+        $('.img-wrapper').height(_width);
+        $('input[type="file"]').on('change', function () {
+            if (this.files.length) {
+                // Checking Browser Support for FileReader API
+                if (typeof FileReader == "undefined") {
+                    dialog.toast('processInline is not supported by your Browser', 'error');
+                } else {
+                    var reader = new FileReader(),$img=$(this).parent().siblings().find('img'); 
+                    $(this).next().find('img').attr('src','../images/photo2.png')
+                    reader.onload = function (e) {
+                        var image = new Image();
+                        image.src = e.target.result;
+                        image.onload = function () {
+                            $img.attr('src', image.src);
+                        }
+                    };
+                    reader.readAsDataURL(this.files[0]);
+                }
+            }
+        });
+
+
+        /**
+         * 提交
+         */
+        $('#submit').on('click', function () {
+            var data = YDUI.util.getJsonData('#fileForm');
+            if (!data.name) {
+                dialog.notify('请先输入姓名');
+                return false;
+            }
+            if (!data.bankcardNumber) {
+                dialog.notify('请先输入银行卡号');
+                return false;
+            }
+            if (!data["idCard-hold"]) {
+                dialog.notify('请上传个人手持身份证照片');
+                return false;
+            }
+            if (!data["idCard-front"]) {
+                dialog.notify('请上传个人人身份证正面照片');
+                return false;
+            }
+            if (!data["idCard-back"]) {
+                dialog.notify('请上传个人身份证反面照片');
+                return false;
+            }
+            if (!data["bankCard-front"]) {
+                dialog.notify('请上传银行卡正面照片');
+                return false;
+            }
+            if (!data["bankCard-back"]) {
+                dialog.notify('请上传银行卡反面照片');
+                return false;
+            }
+            dialog.loading.open('上传中...');
+            $('#fileForm').ajaxSubmit({
+                url: "",
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    /**
+                     * 成功跳转，失败弹窗
+                     */
+                    dialog.toast('请重新输入', 'error');
+                    window.location.href = '';
+                },
+                error: function () {
+                    dialog.loading.close();
+                    dialog.toast('请求失败', 'error', 1500);
+                }
+            });
+            window.location.href="success.html";
+
+        });
+    });
+</script>
+</body>
+</html>
